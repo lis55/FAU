@@ -48,26 +48,24 @@ return (stream);
 
 }
 
-istream& operator>>(ostream& stream, const Matrix& m){
+istream& operator>>(istream& stream, Matrix& m){
 
 for(int i = 0; i < m.rows; i++){
         for(int j = 0; j < m.columns; j++){
-            stream <<  m.matrix[i * m.columns + j] << "\t";
+            stream >> m.matrix[i * m.columns + j];
         }
-
-        stream << endl;
 }
 return (stream);
 
 }
 
-
 bool Matrix::operator==(const Matrix& m) const
 {
     for (int i=0;i<m.rows*m.columns;i++){
-
+        if(this->matrix[i]!=m.matrix[i])
+        return(false);
     }
-    return(this->matrix==m.matrix);
+    return(true);
 }
 
 bool Matrix::operator!=(const Matrix& m) const
