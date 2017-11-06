@@ -20,7 +20,7 @@ class Matrix{
     Matrix& operator+=(const Matrix& m);
     Matrix& operator-=(const Matrix& m);
     friend ostream& operator<<(ostream& stream,const Matrix& m);
-    friend istream& operator<<(istream& stream,const Matrix& m);
+    friend istream& operator>>(istream& stream, Matrix& m);
 };
 ostream& operator<<(ostream& stream,const Matrix& m);
 istream& operator>>(istream& stream, Matrix& m);

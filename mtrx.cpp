@@ -55,6 +55,7 @@ for(int i = 0; i < m.rows; i++){
             stream >> m.matrix[i * m.columns + j];
         }
 }
+
 return (stream);
 
 }
@@ -70,7 +71,11 @@ bool Matrix::operator==(const Matrix& m) const
 
 bool Matrix::operator!=(const Matrix& m) const
 {
-    return(matrix!=m.matrix);
+    for (int i=0;i<m.rows*m.columns;i++){
+        if(this->matrix[i]==m.matrix[i])
+        return(false);
+    }
+    return(true);
 }
 
 Matrix& Matrix::operator=(const Matrix &m) {
@@ -128,8 +133,8 @@ return(*this);
 int main(){
 
 Matrix A(2,2),B(2,2), C(2,2);
-A.setvalues();
-C.setvalues();
+cin >>A;
+cin>>C;
 B=C;
 
 cout<<A<<endl<<B<<endl<< A+B <<endl<<C;
