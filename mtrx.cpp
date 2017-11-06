@@ -45,7 +45,6 @@ for(int i = 0; i < m.rows; i++){
         stream << endl;
 }
 return (stream);
-
 }
 
 istream& operator>>(istream& stream, Matrix& m){
@@ -104,21 +103,36 @@ Matrix::Matrix(const Matrix &m):   rows    (m.rows),
 }
 
 Matrix Matrix::operator+(const Matrix& m) const{
-
-for(int i = 0; i < m.rows*m.columns; i++){
-    this->matrix[i]+=m.matrix[i];
+Matrix sum(this->rows,this->columns);
+for(int i = 0; i < this->rows*this->columns; i++){
+    sum.matrix[i]=this->matrix[i]+m.matrix[i];
 }
-return(*this);
-
+return(sum);
 }
 
 Matrix Matrix::operator-(const Matrix& m) const{
-for(int i = 0; i < m.rows*m.columns; i++){
-    this->matrix[i]-=m.matrix[i];
+Matrix sum(this->rows,this->columns);
+for(int i = 0; i < this->rows*this->columns; i++)
+    sum.matrix[i]=this->matrix[i]-m.matrix[i];
+return sum;
 }
 
-return(*this);
 
+Matrix Matrix::operator*(const Matrix& m) const{
+Matrix sum(m.columns,this->rows);
+    for(int i = 0; i < sum.rows; i++)
+        for(int j = 0; j < sum.columns; j++)
+            for (int k=0; k< m.rows; k++)
+                sum.matrix[i * sum.columns + j] += (this->matrix[i * this->columns + k] * m.matrix[k * m.columns + j]);
+return sum;
+}9
+
+Matrix& Matrix::operator*=(const Matrix& m){
+    for(int i = 0; i < this->rows; i++)
+        for(int j = 0; j < m.columns; j++)
+            for (int k=0; k<this->rows; k++)
+                this->matrix[i * this->columns + j] += (this->matrix[i * this->columns + k] * m.matrix[k * m.columns + j]);
+return *this;
 }
 
 Matrix& Matrix::operator-=(const Matrix& m){
@@ -130,14 +144,22 @@ return(*this);
 
 }
 
+Matrix& Matrix::operator+=(const Matrix& m){
+
+for(int i = 0; i < m.rows*m.columns; i++){
+    this->matrix[i]+=m.matrix[i];
+}
+return(*this);
+}
+
 int main(){
 
-Matrix A(2,2),B(2,2), C(2,2);
+Matrix A(2,2),B(2,2), C(1,2);
 cin >>A;
 cin>>C;
-B=C;
 
-cout<<A<<endl<<B<<endl<< A+B <<endl<<C;
+
+cout<<A<<endl<<B<<endl<< C*A <<endl<<C;
 
 if (B==C){
     cout<<"yes"<<endl;
@@ -145,7 +167,6 @@ if (B==C){
 if (C==B){
     cout<<"yes"<<endl;
 }
-
 if (A==C){
     cout <<"yes"<<endl;
 }

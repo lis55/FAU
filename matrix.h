@@ -9,7 +9,7 @@ class Matrix{
     Matrix(int,int);
     ~Matrix();
     Matrix(const Matrix &m);
-    getrows();
+    int getrows();
     int getcolumns();
     int setvalues();
     bool operator==(const Matrix& m) const;
@@ -17,8 +17,10 @@ class Matrix{
     Matrix& operator=( const Matrix &m);
     Matrix operator+(const Matrix& m) const;
     Matrix operator-(const Matrix& m) const;
+    Matrix operator*(const Matrix& m) const;
     Matrix& operator+=(const Matrix& m);
     Matrix& operator-=(const Matrix& m);
+    Matrix& operator*=(const Matrix& m);
     friend ostream& operator<<(ostream& stream,const Matrix& m);
     friend istream& operator>>(istream& stream, Matrix& m);
 };
