@@ -7,8 +7,8 @@ matrix=NULL;
 }
 
 Matrix::Matrix(int x, int y){
-    rows=y;
-    columns=x;
+    rows=x;
+    columns=y;
     matrix = new double[rows*columns];
     for(int i = 0; i < rows*columns; ++i){
             matrix[i]=0;
@@ -119,13 +119,13 @@ return sum;
 
 
 Matrix Matrix::operator*(const Matrix& m) const{
-Matrix sum(m.columns,this->rows);
+Matrix sum(this->rows,m.columns);
     for(int i = 0; i < sum.rows; i++)
         for(int j = 0; j < sum.columns; j++)
-            for (int k=0; k< m.rows; k++)
+            for (int k=0; k< this->columns; k++)
                 sum.matrix[i * sum.columns + j] += (this->matrix[i * this->columns + k] * m.matrix[k * m.columns + j]);
 return sum;
-}9
+}
 
 Matrix& Matrix::operator*=(const Matrix& m){
     for(int i = 0; i < this->rows; i++)
@@ -154,12 +154,12 @@ return(*this);
 
 int main(){
 
-Matrix A(2,2),B(2,2), C(1,2);
+Matrix A(2,2),B(1,2), C(2,1);
 cin >>A;
 cin>>C;
 
 
-cout<<A<<endl<<B<<endl<< C*A <<endl<<C;
+cout<<A<<endl<<C<<endl<< A*C <<endl<<B*A<<endl;
 
 if (B==C){
     cout<<"yes"<<endl;
