@@ -1,5 +1,6 @@
 #include<iostream>
 #include "matrix.h"
+#include <assert.h>
 using namespace std;
 
 Matrix::Matrix(){
@@ -103,6 +104,8 @@ Matrix::Matrix(const Matrix &m):   rows    (m.rows),
 }
 
 Matrix Matrix::operator+(const Matrix& m) const{
+assert(this->rows==m.rows);
+assert(this->columns==m.columns);
 Matrix sum(this->rows,this->columns);
 for(int i = 0; i < this->rows*this->columns; i++){
     sum.matrix[i]=this->matrix[i]+m.matrix[i];
@@ -111,6 +114,8 @@ return(sum);
 }
 
 Matrix Matrix::operator-(const Matrix& m) const{
+assert(this->rows==m.rows);
+assert(this->columns==m.columns);
 Matrix sum(this->rows,this->columns);
 for(int i = 0; i < this->rows*this->columns; i++)
     sum.matrix[i]=this->matrix[i]-m.matrix[i];
@@ -119,6 +124,7 @@ return sum;
 
 
 Matrix Matrix::operator*(const Matrix& m) const{
+assert(this->columns==m.rows);
 Matrix sum(this->rows,m.columns);
     for(int i = 0; i < sum.rows; i++)
         for(int j = 0; j < sum.columns; j++)
@@ -129,13 +135,15 @@ return sum;
 
 Matrix& Matrix::operator*=(const Matrix& m){
     for(int i = 0; i < this->rows; i++)
-        for(int j = 0; j < m.columns; j++)
-            for (int k=0; k<this->rows; k++)
+        for(int j = 0; j < this->columns; j++)
+            for (int k=0; k< this->columns; k++)
                 this->matrix[i * this->columns + j] += (this->matrix[i * this->columns + k] * m.matrix[k * m.columns + j]);
 return *this;
 }
 
 Matrix& Matrix::operator-=(const Matrix& m){
+assert(this->rows==m.rows);
+assert(this->columns==m.columns);
 
 for(int i = 0; i < m.rows*m.columns; i++){
     this->matrix[i]-=m.matrix[i];
@@ -145,6 +153,8 @@ return(*this);
 }
 
 Matrix& Matrix::operator+=(const Matrix& m){
+assert(this->rows==m.rows);
+assert(this->columns==m.columns);
 
 for(int i = 0; i < m.rows*m.columns; i++){
     this->matrix[i]+=m.matrix[i];
@@ -157,9 +167,14 @@ int main(){
 Matrix A(2,2),B(1,2), C(2,1);
 cin >>A;
 cin>>C;
+//B*=A;
+A==C;
 
 
-cout<<A<<endl<<C<<endl<< A*C <<endl<<B*A<<endl;
+cout<<A+A;
+
+
+//cout<<A<<endl<<C<<endl<< A*C <<endl<<B*A<<endl<<B;
 
 if (B==C){
     cout<<"yes"<<endl;
