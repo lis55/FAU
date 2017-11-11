@@ -105,6 +105,8 @@ return (stream);
 
 bool Matrix::operator==(const Matrix& m) const
 {
+	if(this->rows_!=m.rows_ || this->cols_!=m.cols_){
+	return false;}
     for (size_t i=0;i<m.rows_*m.cols_;i++){
         if(this->matrix[i]!=m.matrix[i])
         return(false);
@@ -114,14 +116,15 @@ bool Matrix::operator==(const Matrix& m) const
 
 bool Matrix::operator!=(const Matrix& m) const
 {
-    if (this->rows_!=m.rows_ || this->cols_!=m.cols_){
-        return true;
-    }
+    if(this->rows_!=m.rows_ || this->cols_!=m.cols_){
+return true;
+}
+	
     for (size_t i=0;i<m.rows_*m.cols_;i++){
-        if(this->matrix[i]==m.matrix[i])
-        return(false);
+        if(this->matrix[i]!=m.matrix[i])
+        return(true);
     }
-    return(true);
+    return(false);
 }
 
 Matrix& Matrix::operator=(const Matrix &m) {
