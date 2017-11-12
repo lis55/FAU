@@ -6,11 +6,16 @@
 using namespace std;
 
 int main(){
-ifstream in("BigMatrix.input.txt",ios::in);
 size_t s1,s2,s3;
-Matrix m1(s1,s2,0),m2(s2,s3,0),m3(s1,s3,0);
+double number;
+cin>>s1>>s2>>s3;
 
-cin>>s1>>s2>>s3>>m1>>m2;
+Matrix m1,m2,m3;
+cin>>m1>>m2>>m3;
+
+if (s1*s2<m1.rows()*m1.cols()){
+ cout <<"invalid dimensions"<<endl;
+}
 
 if ((s1==0) || (s2==0) || (s3==0)){
 	cout << "None of the sizes can be 0" << endl;
