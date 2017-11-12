@@ -61,9 +61,12 @@ Matrix::Matrix(size_t x, size_t y, double z){
     rows_=x;
     cols_=y;
     matrix = new double[rows_*cols_];
-    for(size_t i = 0; i < rows_*cols_; ++i){
-            matrix[i]=z;
-    }
+//    for(size_t i = 0; i < rows_*cols_; ++i){
+//            matrix[i]=z;
+//    }
+for (size_t i = 0; i < rows_; ++i)
+    for (size_t j = 0; j < cols_; ++j)
+        this->matrix[i*cols_+j]=z;            
 }
 
 Matrix::~Matrix(){
@@ -107,11 +110,16 @@ bool Matrix::operator==(const Matrix& m) const
 {
 	if(this->rows_!=m.rows_ || this->cols_!=m.cols_){
 	return false;}
-    for (size_t i=0;i<m.rows_*m.cols_;i++){
-        if(this->matrix[i]!=m.matrix[i])
-        return(false);
-    }
-    return(true);
+    //for (size_t i=0;i<m.rows_*m.cols_;i++){
+    //    if(this->matrix[i]!=m.matrix[i])
+    //    return(false);
+    //}
+for (size_t i = 0; i < m.rows_; ++i){
+    for (size_t j = 0; j < m.cols_; ++j){
+        if(this->matrix[i*cols_+j]!=m(i,j))
+            return(false);
+}}
+return(true);
 }
 
 bool Matrix::operator!=(const Matrix& m) const
@@ -120,11 +128,16 @@ bool Matrix::operator!=(const Matrix& m) const
 return true;
 }
 	
-    for (size_t i=0;i<m.rows_*m.cols_;i++){
-        if(this->matrix[i]!=m.matrix[i])
-        return(true);
-    }
-    return(false);
+//    for (size_t i=0;i<m.rows_*m.cols_;i++){
+//        if(this->matrix[i]!=m.matrix[i])
+//        return(true);
+//    }
+
+for (size_t i = 0; i < m.rows_; ++i){
+    for (size_t j = 0; j < m.cols_; ++j){
+        if(this->matrix[i*cols_+j]!=m(i,j))
+            return(true);}}
+return(false);
 }
 
 Matrix& Matrix::operator=(const Matrix &m) {
@@ -139,6 +152,7 @@ Matrix& Matrix::operator=(const Matrix &m) {
     for (size_t r = 0; r < rows_; r++) {
        for (size_t c = 0; c < cols_; c++) {
           this->matrix[r * cols_ + c] = m.matrix[r * cols_ + c];
+		
        }
     }
     return *this;
@@ -158,8 +172,12 @@ Matrix Matrix::operator+(const Matrix& m) const{
 assert(this->rows_==m.rows_);
 assert(this->cols_==m.cols_);
 Matrix sum(this->rows_,this->cols_,0.0);
-for(size_t i = 0; i < this->rows_*this->cols_; i++){
-    sum.matrix[i]=this->matrix[i]+m.matrix[i];
+//for(size_t i = 0; i < this->rows_*this->cols_; i++){
+    //sum.matrix[i]=this->matrix[i]+m.matrix[i];
+for(size_t i = 0; i < this->rows_; i++){	
+for(size_t j=0; j<this->cols_;j++){
+	sum(i,j)=this->matrix[i*this->cols_+j]+m(i,j);
+}
 }
 return(sum);
 }
@@ -168,8 +186,12 @@ Matrix Matrix::operator-(const Matrix& m) const{
 assert(this->rows_==m.rows_);
 assert(this->cols_==m.cols_);
 Matrix sum(this->rows_,this->cols_,0.0);
-for(size_t i = 0; i < this->rows_*this->cols_; i++)
-    sum.matrix[i]=this->matrix[i]-m.matrix[i];
+//for(size_t i = 0; i < this->rows_*this->cols_; i++)
+  //  sum.matrix[i]=this->matrix[i]-m.matrix[i];
+for(size_t i = 0; i < this->rows_; i++)	
+	for(size_t j=0; j<this->cols_;j++)
+		sum(i,j)=this->matrix[i*this->cols_+j]-m(i,j);
+
 return sum;
 }
 
@@ -185,10 +207,18 @@ return sum;
 }
 
 Matrix& Matrix::operator*=(const Matrix& m){
-    for(size_t i = 0; i < this->rows_; i++)
-        for(size_t j = 0; j < this->cols_; j++)
+assert(this->cols_==m.rows_);
+Matrix sum(this->rows_,m.cols_,0.0);
+    for(size_t i = 0; i < sum.rows_; i++)
+        for(size_t j = 0; j < sum.cols_; j++)
             for (size_t k=0; k< this->cols_; k++)
-                this->matrix[i * this->cols_ + j] += (this->matrix[i * this->cols_ + k] * m.matrix[k * m.cols_ + j]);
+                sum.matrix[i * sum.cols_ + j] += (this->matrix[i * this->cols_ + k] * m.matrix[k * m.cols_ + j]);
+		
+this->cols_=sum.cols_;
+this->rows_=sum.rows_;    
+for(size_t i = 0; i < sum.rows_; i++)
+        for(size_t j = 0; j < sum.cols_; j++)
+		this->matrix[i * sum.cols_ + j]=sum.matrix[i * sum.cols_ + j];
 return *this;
 }
 
@@ -196,9 +226,12 @@ Matrix& Matrix::operator-=(const Matrix& m){
 assert(this->rows_==m.rows_);
 assert(this->cols_==m.cols_);
 
-for(size_t i = 0; i < m.rows_*m.cols_; i++){
-    this->matrix[i]-=m.matrix[i];
-}
+//for(size_t i = 0; i < m.rows_*m.cols_; i++){
+//    this->matrix[i]-=m.matrix[i];
+//}
+for(size_t i = 0; i < m.rows_; i++)	
+	for(size_t j=0; j<m.cols_;j++)
+		this->matrix[i*this->cols_+j]-=m(i,j);
 return(*this);
 
 }
@@ -207,9 +240,12 @@ Matrix& Matrix::operator+=(const Matrix& m){
 assert(this->rows_==m.rows_);
 assert(this->cols_==m.cols_);
 
-for(size_t i = 0; i < m.rows_*m.cols_; i++){
-    this->matrix[i]+=m.matrix[i];
-}
+//for(size_t i = 0; i < m.rows_*m.cols_; i++){
+//    this->matrix[i]+=m.matrix[i];
+//}
+for(size_t i = 0; i < m.rows_; i++)	
+	for(size_t j=0; j<m.cols_;j++)
+		this->matrix[i*this->cols_+j]+=m(i,j);
 return(*this);
 }
 
