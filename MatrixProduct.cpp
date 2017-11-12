@@ -1,30 +1,26 @@
 
 #include <iostream>
-#include <typeinfo>
 #include "Matrix.h"
 #include <assert.h>
+#include <fstream>
 using namespace std;
 
 int main(){
-
+ifstream in("BigMatrix.input.txt",ios::in);
 size_t s1,s2,s3;
-
-cin>>s1;
-cin>>s2;
-cin>>s3;
-
-if (typeid(s1) != typeid(size_t()) || typeid(s2) != typeid(size_t()) || typeid(s3) != typeid(size_t())){
-cout<<"invalid type"<<endl;
-assert(0);
-}
-
 Matrix m1(s1,s2,0),m2(s2,s3,0),m3(s1,s3,0);
 
-cin>>m1;
-cin>>m2;
-cin>>m3;
+cin>>s1>>s2>>s3>>m1>>m2;
 
-cout<<m1*m2<<endl;
+if ((s1==0) || (s2==0) || (s3==0)){
+	cout << "None of the sizes can be 0" << endl;
+	return 1;}
+else if((s1<0) || (s2<0) || (s3<0)){	
+	cout << "None of the sizes can be negative" << endl;}
+
+m3=m1*m2;
+
+cout<<m3<<endl;
 
 return 0;
 }
